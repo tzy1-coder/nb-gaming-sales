@@ -39,7 +39,11 @@ thead th{position:sticky;top:0;background:#1f2540;color:#fff;height:30px;min-hei
 #total-row th{position:static;background:linear-gradient(135deg,#e6b800,#d4a017);color:#12162a;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #b89400;box-sizing:border-box;font-weight:800;}
 .hl{background:rgba(0,206,201,0.20)!important;color:#00ffd5!important;font-weight:800;}
 thead th:hover{background:#263052;}
-th:nth-child(1),td:nth-child(1){width:56px;min-width:56px;max-width:56px;}
+/* 第1列「排序」左侧固定 */
+th:nth-child(1),td:nth-child(1){position:sticky;left:0;width:56px;min-width:56px;max-width:56px;z-index:6;background:#161a2e;}
+thead th:nth-child(1){background:#1f2540;z-index:3;}
+tbody tr:hover td:nth-child(1){background:#1c2240;}
+#total-row th:nth-child(1){position:sticky;left:0;z-index:3;}
 th:nth-child(2),td:nth-child(2){width:80px;min-width:80px;max-width:80px;}
 th:nth-child(3),td:nth-child(3){width:115px;min-width:115px;max-width:115px;}
 th:nth-child(4),td:nth-child(4){width:130px;min-width:130px;max-width:130px;}
