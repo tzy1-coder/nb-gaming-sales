@@ -33,26 +33,20 @@ td.price-diff{color:#ffe066 !important;font-weight:700;}
 .tbl-scroll{overflow:auto;max-height:72vh;border:1px solid #232a48;border-radius:8px;}
 table{border-collapse:separate;border-spacing:0;width:2700px;min-width:2700px;font-size:11px;}
 td{cursor:pointer;}
-thead th{position:sticky;top:0;background:#1f2540;color:#fff;height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #2a3150;z-index:2;white-space:nowrap;cursor:pointer;user-select:none;box-sizing:border-box;}
+thead th{position:sticky;top:0;background:#1f2540;color:#fff;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #2a3150;z-index:2;white-space:nowrap;cursor:pointer;user-select:none;box-sizing:border-box;}
+/* 固定前两行：第1行表头 top:0（高30px），第2行总计 top:30px */
 #total-row{position:sticky;top:30px;z-index:2;background:linear-gradient(135deg,#e6b800,#d4a017);}
-#total-row th{position:static;background:linear-gradient(135deg,#e6b800,#d4a017);color:#12162a;height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #b89400;box-sizing:border-box;font-weight:800;}
+#total-row th{position:static;background:linear-gradient(135deg,#e6b800,#d4a017);color:#12162a;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #b89400;box-sizing:border-box;font-weight:800;}
 .hl{background:rgba(0,206,201,0.20)!important;color:#00ffd5!important;font-weight:800;}
 thead th:hover{background:#263052;}
 th:nth-child(1),td:nth-child(1){width:56px;min-width:56px;max-width:56px;}
 th:nth-child(2),td:nth-child(2){width:80px;min-width:80px;max-width:80px;}
 th:nth-child(3),td:nth-child(3){width:115px;min-width:115px;max-width:115px;}
 th:nth-child(4),td:nth-child(4){width:130px;min-width:130px;max-width:130px;}
-/* 仅固定系列(5)、配置(6) 两列，贴左边缘 */
-th:nth-child(5),td:nth-child(5){position:sticky;left:0;width:135px;min-width:135px;max-width:135px;z-index:6;background:#161a2e;box-shadow:2px 0 0 #232a48,-16px 0 0 #161a2e;}
-th:nth-child(6),td:nth-child(6){position:sticky;left:135px;width:250px;min-width:250px;max-width:250px;z-index:6;background:#161a2e;box-shadow:2px 0 6px rgba(0,0,0,.55);}
-/* 表头冻结列背景保持与其它表头一致 */
-thead th:nth-child(5),thead th:nth-child(6){background:#1f2540;}
-thead th:nth-child(5){box-shadow:2px 0 0 #2a3150,-16px 0 0 #1f2540;}
-/* 正文冻结列背景（不透明，防止右侧内容透过） */
-tbody tr:hover td:nth-child(5),tbody tr:hover td:nth-child(6){background:#1c2240;}
-/* 总计行冻结列（需覆盖 #total-row th 的 static） */
-#total-row th:nth-child(5){position:sticky;left:0;z-index:7;}
-#total-row th:nth-child(6){position:sticky;left:135px;z-index:7;}
+/* 列固定已取消：所有列跟随横向滚动（宽度照旧） */
+/* 所有列均跟随横向滚动，不做固定 */
+th:nth-child(5),td:nth-child(5){width:135px;min-width:135px;max-width:135px;}
+th:nth-child(6),td:nth-child(6){width:175px;min-width:175px;max-width:175px;}
 /* 表头与数据统一左对齐 */
 thead th{text-align:left;}
 #total-row th{text-align:left;}
@@ -66,7 +60,7 @@ tbody tr:hover{background:#1c2240;}
 .zoom-box button{background:#2a3150;border:none;color:#e8ecf4;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:13px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;}
 .zoom-box button:hover{background:#ff4757;color:#fff;}
 .zoom-box .zval{font-size:11px;color:#9aa3bd;min-width:36px;text-align:center;font-variant-numeric:tabular-nums;}
-#zoom-wrap{zoom:0.86;}
+#zoom-wrap{zoom:0.91;}
 .empty{text-align:center;color:#6b7490;padding:16px;}
 .no-data{text-align:center;color:#ffa502;padding:40px;font-size:14px;}
 .footer{margin-top:10px;text-align:center;color:#5a6280;font-size:11px;}
@@ -381,7 +375,7 @@ renderTable();
 </script>
 <div class="zoom-box">
   <button id="z-out" title="缩小">−</button>
-  <span class="zval" id="z-val">86%</span>
+  <span class="zval" id="z-val">91%</span>
   <button id="z-in" title="放大">+</button>
 </div>
 </div>
@@ -391,7 +385,7 @@ renderTable();
   var val=document.getElementById('z-val');
   var btnOut=document.getElementById('z-out');
   var btnIn=document.getElementById('z-in');
-  var MIN=0.5,MAX=1.5,STEP=0.05,DEFAULT=0.86;
+  var MIN=0.5,MAX=1.5,STEP=0.01,DEFAULT=0.91;
   var cur=DEFAULT;
   function apply(){
     wrap.style.zoom=cur;
