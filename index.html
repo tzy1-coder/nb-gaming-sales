@@ -7,6 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Segoe UI','Microsoft YaHei',sans-serif;background:#0f1220;color:#e8ecf4;padding:12px 14px;}
+td.price-diff{color:#ffe066 !important;font-weight:700;}
 .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
 .header h1{font-size:19px;font-weight:700;background:linear-gradient(90deg,#ff4757,#ffa502);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .date-selector{display:flex;align-items:center;gap:8px;background:#1a1f33;padding:4px 10px;border-radius:16px;border:1px solid #2a3150;}
@@ -29,8 +30,8 @@ body{font-family:'Segoe UI','Microsoft YaHei',sans-serif;background:#0f1220;colo
 .table-card{background:#161a2e;border:1px solid #232a48;border-radius:10px;padding:10px 12px;}
 .table-card h3{font-size:13px;margin-bottom:6px;color:#fff;display:flex;align-items:center;gap:8px;}
 .table-card h3 span.dot{width:6px;height:6px;border-radius:50%;background:#ff4757;display:inline-block;}
-.tbl-scroll{overflow:auto;max-height:76vh;border:1px solid #232a48;border-radius:8px;}
-table{border-collapse:collapse;width:100%;min-width:1880px;font-size:11px;}
+.tbl-scroll{overflow:auto;max-height:72vh;border:1px solid #232a48;border-radius:8px;}
+table{border-collapse:separate;border-spacing:0;width:2700px;min-width:2700px;font-size:11px;}
 td{cursor:pointer;}
 thead th{position:sticky;top:0;background:#1f2540;color:#fff;height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #2a3150;z-index:2;white-space:nowrap;cursor:pointer;user-select:none;box-sizing:border-box;}
 #total-row{position:sticky;top:30px;z-index:2;background:linear-gradient(135deg,#e6b800,#d4a017);}
@@ -41,25 +42,31 @@ th:nth-child(1),td:nth-child(1){width:56px;min-width:56px;max-width:56px;}
 th:nth-child(2),td:nth-child(2){width:80px;min-width:80px;max-width:80px;}
 th:nth-child(3),td:nth-child(3){width:115px;min-width:115px;max-width:115px;}
 th:nth-child(4),td:nth-child(4){width:130px;min-width:130px;max-width:130px;}
-/* 仅固定系列(5)、配置(6) 两列 */
-th:nth-child(5),td:nth-child(5){position:sticky;left:0;width:135px;min-width:135px;max-width:135px;z-index:4;}
-th:nth-child(6),td:nth-child(6){position:sticky;left:135px;width:225px;min-width:225px;max-width:225px;z-index:4;}
+/* 仅固定系列(5)、配置(6) 两列，贴左边缘 */
+th:nth-child(5),td:nth-child(5){position:sticky;left:0;width:135px;min-width:135px;max-width:135px;z-index:6;background:#161a2e;box-shadow:2px 0 0 #232a48,-16px 0 0 #161a2e;}
+th:nth-child(6),td:nth-child(6){position:sticky;left:135px;width:250px;min-width:250px;max-width:250px;z-index:6;background:#161a2e;box-shadow:2px 0 6px rgba(0,0,0,.55);}
 /* 表头冻结列背景保持与其它表头一致 */
 thead th:nth-child(5),thead th:nth-child(6){background:#1f2540;}
+thead th:nth-child(5){box-shadow:2px 0 0 #2a3150,-16px 0 0 #1f2540;}
 /* 正文冻结列背景（不透明，防止右侧内容透过） */
-tbody td:nth-child(5),tbody td:nth-child(6){background:#161a2e;}
 tbody tr:hover td:nth-child(5),tbody tr:hover td:nth-child(6){background:#1c2240;}
 /* 总计行冻结列（需覆盖 #total-row th 的 static） */
-#total-row th:nth-child(5){position:sticky;left:0;z-index:5;}
-#total-row th:nth-child(6){position:sticky;left:135px;z-index:5;}
+#total-row th:nth-child(5){position:sticky;left:0;z-index:7;}
+#total-row th:nth-child(6){position:sticky;left:135px;z-index:7;}
 /* 表头与数据统一左对齐 */
 thead th{text-align:left;}
 #total-row th{text-align:left;}
 tbody td.num{text-align:left;}
-tbody td{padding:3px 9px;border-bottom:1px solid #1c2238;text-align:left;white-space:nowrap;}
-tbody td.num{text-align:right;font-variant-numeric:tabular-nums;}
+tbody td{padding:2px 8px;border-bottom:1px solid #1c2238;text-align:left;white-space:nowrap;}
+tbody td.num{text-align:left;font-variant-numeric:tabular-nums;}
 tbody tr:hover{background:#1c2240;}
-td.price-diff{color:#ffe066 !important;font-weight:700;}
+/* 缩放按钮 */
+.zoom-box{position:fixed;left:14px;bottom:14px;display:flex;align-items:center;gap:6px;background:#1a1f33;border:1px solid #2a3150;border-radius:20px;padding:4px 8px;z-index:99;box-shadow:0 4px 14px rgba(0,0,0,.5);opacity:.92;}
+.zoom-box:hover{opacity:1;}
+.zoom-box button{background:#2a3150;border:none;color:#e8ecf4;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:13px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;}
+.zoom-box button:hover{background:#ff4757;color:#fff;}
+.zoom-box .zval{font-size:11px;color:#9aa3bd;min-width:36px;text-align:center;font-variant-numeric:tabular-nums;}
+#zoom-wrap{zoom:0.86;}
 .empty{text-align:center;color:#6b7490;padding:16px;}
 .no-data{text-align:center;color:#ffa502;padding:40px;font-size:14px;}
 .footer{margin-top:10px;text-align:center;color:#5a6280;font-size:11px;}
@@ -69,6 +76,7 @@ td.price-diff{color:#ffe066 !important;font-weight:700;}
 </style>
 </head>
 <body>
+<div id="zoom-wrap">
 <div class="header">
   <h1>游戏本每日进销存看板</h1>
   <div class="date-selector">
@@ -370,6 +378,38 @@ buildHeader();
 buildFilters();
 computeKPI();
 renderTable();
+</script>
+<div class="zoom-box">
+  <button id="z-out" title="缩小">−</button>
+  <span class="zval" id="z-val">86%</span>
+  <button id="z-in" title="放大">+</button>
+</div>
+</div>
+<script>
+(function(){
+  var wrap=document.getElementById('zoom-wrap');
+  var val=document.getElementById('z-val');
+  var btnOut=document.getElementById('z-out');
+  var btnIn=document.getElementById('z-in');
+  var MIN=0.5,MAX=1.5,STEP=0.05,DEFAULT=0.86;
+  var cur=DEFAULT;
+  function apply(){
+    wrap.style.zoom=cur;
+    val.textContent=Math.round(cur*100)+'%';
+    var atMin=(cur<=MIN+1e-6), atMax=(cur>=MAX-1e-6);
+    btnOut.disabled=atMin; btnIn.disabled=atMax;
+    btnOut.style.opacity=atMin?0.35:1;
+    btnIn.style.opacity=atMax?0.35:1;
+    try{localStorage.setItem('boardZoom',cur);}catch(e){}
+  }
+  try{
+    var saved=parseFloat(localStorage.getItem('boardZoom'));
+    if(saved>=MIN&&saved<=MAX){cur=saved;}
+  }catch(e){}
+  btnOut.onclick=function(){if(cur>MIN+1e-6){cur=Math.max(MIN,+(cur-STEP).toFixed(2));apply();}};
+  btnIn.onclick=function(){if(cur<MAX-1e-6){cur=Math.min(MAX,+(cur+STEP).toFixed(2));apply();}};
+  apply();
+})();
 </script>
 </body>
 </html>
