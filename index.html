@@ -30,21 +30,24 @@ td.price-diff{color:#ffe066 !important;font-weight:700;}
 .table-card{background:#161a2e;border:1px solid #232a48;border-radius:10px;padding:10px 12px;}
 .table-card h3{font-size:13px;margin-bottom:6px;color:#fff;display:flex;align-items:center;gap:8px;}
 .table-card h3 span.dot{width:6px;height:6px;border-radius:50%;background:#ff4757;display:inline-block;}
-.tbl-scroll{overflow:auto;max-height:72vh;border:1px solid #232a48;border-radius:8px;}
+.tbl-head{overflow:hidden;border:1px solid #232a48;border-bottom:none;border-radius:8px 8px 0 0;background:#161a2e;}
+.tbl-scroll{overflow:auto;max-height:72vh;border:1px solid #232a48;border-top:none;border-radius:0 0 8px 8px;}
 table{border-collapse:separate;border-spacing:0;width:2700px;min-width:2700px;font-size:11px;}
 td{cursor:pointer;}
-thead th{position:sticky;top:0;background:#1f2540;color:#fff;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #2a3150;z-index:2;white-space:nowrap;cursor:pointer;user-select:none;box-sizing:border-box;}
+thead th{background:#1f2540;color:#fff;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #2a3150;z-index:2;white-space:nowrap;cursor:pointer;user-select:none;box-sizing:border-box;}
 /* 固定前两行：第1行表头 top:0（高30px），第2行总计 top:30px */
-#total-row{position:sticky;top:30px;z-index:2;background:linear-gradient(135deg,#e6b800,#d4a017);}
-#total-row th{position:static;background:linear-gradient(135deg,#e6b800,#d4a017);color:#12162a;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #b89400;box-sizing:border-box;font-weight:800;}
+#total-row{background:linear-gradient(135deg,#e6b800,#d4a017);}
+#total-row th{background:linear-gradient(135deg,#e6b800,#d4a017);color:#12162a;height:30px;min-height:30px;max-height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #b89400;box-sizing:border-box;font-weight:800;}
 .hl{background:rgba(0,206,201,0.20)!important;color:#00ffd5!important;font-weight:800;}
 thead th:hover{background:#263052;}
 /* 第1列「排序」左侧固定 */
-th:nth-child(1),td:nth-child(1){position:sticky;left:0;width:56px;min-width:56px;max-width:56px;z-index:6;background:#161a2e;}
+th:nth-child(1),td:nth-child(1){width:56px;min-width:56px;max-width:56px;}
+#tbl-h th:nth-child(1){width:56px;min-width:56px;max-width:56px;}
+td:nth-child(1){position:sticky;left:0;z-index:6;background:#161a2e;}
 tbody tr:hover td:nth-child(1){background:#1c2240;}
 /* 第1列同时固定前两行：表头格 top:0、总计格 top:30px，横向 left:0；层级高于普通表头/总计格 */
-thead th:nth-child(1){top:0;left:0;background:#1f2540;z-index:8;}
-#total-row th:nth-child(1){position:sticky;top:30px;left:0;background:linear-gradient(135deg,#e6b800,#d4a017);z-index:8;}
+thead th:nth-child(1){background:#1f2540;}
+#total-row th:nth-child(1){background:linear-gradient(135deg,#e6b800,#d4a017);}
 th:nth-child(2),td:nth-child(2){width:80px;min-width:80px;max-width:80px;}
 th:nth-child(3),td:nth-child(3){width:115px;min-width:115px;max-width:115px;}
 th:nth-child(4),td:nth-child(4){width:130px;min-width:130px;max-width:130px;}
@@ -166,9 +169,13 @@ tbody tr:hover{background:#1c2240;}
   <h3><span class="dot"></span>每日进销存明细（可筛选 / 点击表头排序）</h3>
   <div class="result-info">共 <b id="cnt">0</b> 条记录</div>
   <div id="copyToast"></div>
-<div class="tbl-scroll">
-  <table id="tbl">
+<div class="tbl-head">
+  <table id="tbl-h">
     <thead><tr id="thead"></tr><tr id="total-row"></tr></thead>
+  </table>
+  </div>
+  <div class="tbl-scroll">
+  <table id="tbl">
     <tbody id="tbody"></tbody>
   </table>
   </div>
@@ -377,6 +384,49 @@ buildHeader();
 buildFilters();
 computeKPI();
 renderTable();
+
+/* 前两行固定：数据区横向滚动时，只位移上方表头表格（纵向永不滚动） */
+(function(){
+  var sc=document.querySelector('.tbl-scroll');
+  var head=document.getElementById('tbl-h');
+  var tbl=document.getElementById('tbl');
+  if(!sc||!head||!tbl) return;
+
+  function syncX(){
+    var x=sc.scrollLeft;
+    head.style.transform = x? 'translateX('+(-x)+'px)' : '';
+  }
+
+  /* 用数据区某一行的实际列宽，去约束表头表格的列宽，确保两表列宽严格一致 */
+  function alignCols(){
+    var row=document.querySelector('#tbody tr');
+    if(!row) return;
+    var src=row.children, dst=document.getElementById('thead').children;
+    var dst2=document.getElementById('total-row').children;
+    var ws=[];
+    for(var i=0;i<src.length;i++){ ws.push(Math.round(src[i].getBoundingClientRect().width)); }
+    function setCols(cells){
+      for(var i=0;i<cells.length&&i<ws.length;i++){
+        cells[i].style.width=ws[i]+'px';
+        cells[i].style.minWidth=ws[i]+'px';
+        cells[i].style.maxWidth=ws[i]+'px';
+      }
+    }
+    setCols(dst); setCols(dst2);
+    /* 同步总宽，保证横向位移范围一致 */
+    var total=ws.reduce(function(a,b){return a+b;},0);
+    head.style.width=total+'px';
+  }
+
+  function refresh(){ alignCols(); syncX(); }
+
+  sc.addEventListener('scroll', syncX, {passive:true});
+  window.addEventListener('resize', refresh);
+  /* 表格渲染完成后对齐一次；缩放变化时也重新对齐 */
+  setTimeout(refresh, 60);
+  setTimeout(refresh, 400);
+  window.__alignCols = refresh;
+})();
 </script>
 <div class="zoom-box">
   <button id="z-out" title="缩小">−</button>
@@ -400,6 +450,7 @@ renderTable();
     btnOut.style.opacity=atMin?0.35:1;
     btnIn.style.opacity=atMax?0.35:1;
     try{localStorage.setItem('boardZoom',cur);}catch(e){}
+    if(window.__alignCols) setTimeout(window.__alignCols, 30);
   }
   try{
     var saved=parseFloat(localStorage.getItem('boardZoom'));
