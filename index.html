@@ -37,24 +37,25 @@ thead th{position:sticky;top:0;background:#1f2540;color:#fff;height:30px;padding
 #total-row th{position:static;background:linear-gradient(135deg,#e6b800,#d4a017);color:#12162a;height:30px;padding:4px 8px;text-align:center;border-bottom:2px solid #b89400;box-sizing:border-box;font-weight:800;}
 .hl{background:rgba(0,206,201,0.20)!important;color:#00ffd5!important;font-weight:800;}
 thead th:hover{background:#263052;}
-th:nth-child(1),td:nth-child(1){position:sticky;left:0;width:56px;min-width:56px;max-width:56px;z-index:4;}
-th:nth-child(2),td:nth-child(2){position:sticky;left:56px;width:80px;min-width:80px;max-width:80px;z-index:4;}
-th:nth-child(3),td:nth-child(3){position:sticky;left:136px;width:115px;min-width:115px;max-width:115px;z-index:4;}
-th:nth-child(4),td:nth-child(4){position:sticky;left:251px;width:130px;min-width:130px;max-width:130px;z-index:4;}
-th:nth-child(5),td:nth-child(5){position:sticky;left:381px;width:135px;min-width:135px;max-width:135px;z-index:4;}
-th:nth-child(6),td:nth-child(6){position:sticky;left:516px;width:225px;min-width:225px;max-width:225px;z-index:4;}
+th:nth-child(1),td:nth-child(1){width:56px;min-width:56px;max-width:56px;}
+th:nth-child(2),td:nth-child(2){width:80px;min-width:80px;max-width:80px;}
+th:nth-child(3),td:nth-child(3){width:115px;min-width:115px;max-width:115px;}
+th:nth-child(4),td:nth-child(4){width:130px;min-width:130px;max-width:130px;}
+/* 仅固定系列(5)、配置(6) 两列 */
+th:nth-child(5),td:nth-child(5){position:sticky;left:0;width:135px;min-width:135px;max-width:135px;z-index:4;}
+th:nth-child(6),td:nth-child(6){position:sticky;left:135px;width:225px;min-width:225px;max-width:225px;z-index:4;}
 /* 表头冻结列背景保持与其它表头一致 */
-thead th:nth-child(1),thead th:nth-child(2),thead th:nth-child(3),thead th:nth-child(4),thead th:nth-child(5),thead th:nth-child(6){background:#1f2540;}
+thead th:nth-child(5),thead th:nth-child(6){background:#1f2540;}
 /* 正文冻结列背景（不透明，防止右侧内容透过） */
-tbody td:nth-child(1),tbody td:nth-child(2),tbody td:nth-child(3),tbody td:nth-child(4),tbody td:nth-child(5),tbody td:nth-child(6){background:#161a2e;}
-tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2),tbody tr:hover td:nth-child(3),tbody tr:hover td:nth-child(4),tbody tr:hover td:nth-child(5),tbody tr:hover td:nth-child(6){background:#1c2240;}
+tbody td:nth-child(5),tbody td:nth-child(6){background:#161a2e;}
+tbody tr:hover td:nth-child(5),tbody tr:hover td:nth-child(6){background:#1c2240;}
 /* 总计行冻结列（需覆盖 #total-row th 的 static） */
-#total-row th:nth-child(1){position:sticky;left:0;z-index:5;}
-#total-row th:nth-child(2){position:sticky;left:56px;z-index:5;}
-#total-row th:nth-child(3){position:sticky;left:136px;z-index:5;}
-#total-row th:nth-child(4){position:sticky;left:251px;z-index:5;}
-#total-row th:nth-child(5){position:sticky;left:381px;z-index:5;}
-#total-row th:nth-child(6){position:sticky;left:516px;z-index:5;}
+#total-row th:nth-child(5){position:sticky;left:0;z-index:5;}
+#total-row th:nth-child(6){position:sticky;left:135px;z-index:5;}
+/* 表头与数据统一左对齐 */
+thead th{text-align:left;}
+#total-row th{text-align:left;}
+tbody td.num{text-align:left;}
 tbody td{padding:3px 9px;border-bottom:1px solid #1c2238;text-align:left;white-space:nowrap;}
 tbody td.num{text-align:right;font-variant-numeric:tabular-nums;}
 tbody tr:hover{background:#1c2240;}
